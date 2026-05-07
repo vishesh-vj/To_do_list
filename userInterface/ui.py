@@ -14,8 +14,8 @@ class Task():
             for task in self.tasks:
                 var = tk.IntVar()
                 self.vars.append(var)
-                cb = tk.Checkbutton(self.frame, text=task, variable=var, fg='white', bg='teal', selectcolor='teal')
-                cb.pack(anchor='w')
+                cb = tk.Checkbutton(self.frame, text=task, variable=var, fg='#ffffff', bg='#006564', selectcolor='white')
+                cb.pack(anchor='w', fill='x')
 
     def add_task(self, task_str):
         if task_str.strip():
@@ -24,8 +24,8 @@ class Task():
                 f.write(task_str + '\n')
             var = tk.IntVar()
             self.vars.append(var)
-            cb = tk.Checkbutton(self.frame, text=task_str, variable=var, fg='white', bg='teal', selectcolor='teal')
-            cb.pack(anchor='w')
+            cb = tk.Checkbutton(self.frame, text=task_str, variable=var, fg='black', bg='#9BCACD', selectcolor='white')
+            cb.pack(anchor='w',fill='x')
 
     def del_task(self):
         pass
@@ -38,18 +38,18 @@ root.title("TO-DO_LIST")
 # root.minsize(400,200)
 root.geometry('350x500')
 root.resizable(0,0)
-root.configure(background = 'teal')
+root.configure(background = '#9BCACD')
 
-heading = tk.Label(root, text='My TO-DO-List', fg='white', bg='teal')
+heading = tk.Label(root, text='My TO-DO-List', fg='white', bg='#006564')
 heading.pack(pady=(20,10))
 heading.config(font=('verdana', 20))
 
-tk.Label(root, text='Type a new Task here!! ', fg='white', bg='teal').pack(pady=(20,0))
+tk.Label(root, text='Type a new Task here!! ', fg='white', bg='#006564').pack(pady=(20,0))
 entry = tk.Entry(root, width=40)
 entry.pack(ipady=5,pady=(0,10))
 
-task_frame = tk.Frame(root, bg='white')
-task_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+task_frame = tk.Frame(root, bg='white', )
+task_frame.pack(expand=True, padx=10, pady=10)
 
 ob = Task(task_frame)
 
