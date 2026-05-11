@@ -1,5 +1,8 @@
-maths h/w
-maths notes
-vish
-mathjs
-sub
+cas
+acs
+vsv
+svds
+vdvs
+d
+sv
+d
