@@ -14,6 +14,7 @@ class Task():
         self.completed_checkbuttons = []
         self.pending_frame = tk.Frame(frame, bg="#84BEC4")
         self.pending_frame.pack(anchor='w')
+        tk.Label(self.pending_frame, text="Pending Tasks", fg='black', bg='#84BEC4').pack(anchor='w')
         self.completed_frame = tk.Frame(frame, bg="#84BEC4")
         self.completed_frame.pack(anchor='w', pady=(20,0))
         tk.Label(self.completed_frame, text="Completed Tasks", fg='black', bg='#84BEC4').pack(anchor='w')
@@ -51,9 +52,41 @@ class Task():
             cb.destroy()
             self.completed_tasks.append(task)
             self.completed_vars.append(var)
-            cb_completed = tk.Checkbutton(self.completed_frame, text=task, variable=var, fg='black', bg='#84BEC4', selectcolor='white', state='disabled')
+            cb_completed = tk.Checkbutton(
+                self.completed_frame,
+                text=task,
+                variable=var,
+                fg='black',
+                bg='#84BEC4',
+                selectcolor='white',
+                command=self.unmark_completed
+            )
             cb_completed.pack(anchor='w')
             self.completed_checkbuttons.append(cb_completed)
+
+    def unmark_completed(self):
+        to_move = []
+        for i, var in enumerate(self.completed_vars):
+            if var.get() == 0:
+                to_move.append(i)
+        for i in reversed(to_move):
+            task = self.completed_tasks.pop(i)
+            var = self.completed_vars.pop(i)
+            cb = self.completed_checkbuttons.pop(i)
+            cb.destroy()
+            self.tasks.append(task)
+            self.vars.append(var)
+            cb_pending = tk.Checkbutton(
+                self.pending_frame,
+                text=task,
+                variable=var,
+                fg='black',
+                bg='#84BEC4',
+                selectcolor='white',
+                command=self.mark_completed
+            )
+            cb_pending.pack(anchor='w')
+            self.checkbuttons.append(cb_pending)
 
     def clear_table(self):
         remaining_completed = []
@@ -124,6 +157,7 @@ ob = Task(task_frame)
 
 add_tsk_btn = tk.Button(root, text='Add Task', width=25, command=lambda: ob.add_task(entry.get()))
 add_tsk_btn.pack(anchor='nw')
+entry.bind("<Return>", lambda event: ob.add_task(entry.get()))
 
 del_tsk_btn = tk.Button(root, text="Clear Completed Tasks", width=25, command=ob.clear_table)
 del_tsk_btn.pack(anchor='nw',pady=10)
