@@ -1,4 +1,10 @@
-
+<<<<<<< HEAD
+cas
+acs
+vsv
+svds
+Bol
+=======
 maths
 phy
 chem
