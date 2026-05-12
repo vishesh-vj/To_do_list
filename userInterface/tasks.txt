@@ -1,8 +1,5 @@
-cas
-acs
-vsv
-svds
-vdvs
-d
-sv
-d
+maths
+phy
+chem
+dms
+dbms
