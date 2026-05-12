@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-cas
-acs
-vsv
-svds
-Bol
-=======
+
 maths
 phy
 chem
 dms
 dbms
->>>>>>> ab8f898d6f15128f45aafb2bb7141fc4fb837c60
