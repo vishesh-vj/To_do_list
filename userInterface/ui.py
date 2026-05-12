@@ -11,13 +11,21 @@ class Task():
         self.tasks = []
         self.vars = []
         self.checkbuttons = []
+        self.completed_tasks = []
+        self.completed_vars = []
+        self.completed_checkbuttons = []
+        self.pending_frame = tk.Frame(frame, bg="#84BEC4")
+        self.pending_frame.pack(anchor='w')
+        self.completed_frame = tk.Frame(frame, bg="#84BEC4")
+        self.completed_frame.pack(anchor='w', pady=(20,0))
+        tk.Label(self.completed_frame, text="Completed Tasks", fg='black', bg='#84BEC4').pack(anchor='w')
         if os.path.exists('userInterface/tasks.txt'):
             with open('userInterface/tasks.txt','r') as f:
                 self.tasks = [line.strip() for line in f if line.strip()]
             for task in self.tasks:
                 var = tk.IntVar()
                 self.vars.append(var)
-                cb = tk.Checkbutton(self.frame, text=task, variable=var, fg='black', bg='#84BEC4', selectcolor='white')
+                cb = tk.Checkbutton(self.pending_frame, text=task, variable=var, fg='black', bg='#84BEC4', selectcolor='white', command=self.mark_completed)
                 cb.pack(anchor='w')
                 self.checkbuttons.append(cb)
 
@@ -28,30 +36,43 @@ class Task():
                 f.write(task_str + '\n')
             var = tk.IntVar()
             self.vars.append(var)
-            cb = tk.Checkbutton(self.frame, text=task_str, variable=var, fg='black', bg='#84BEC4', selectcolor='white')
+            cb = tk.Checkbutton(self.pending_frame, text=task_str, variable=var, fg='black', bg='#84BEC4', selectcolor='white', command=self.mark_completed)
             cb.pack(anchor='w')
             self.checkbuttons.append(cb)
             entry.delete(0, tk.END)
 
-    def del_task(self):
-        remaining_tasks = []
-        remaining_vars = []
-        remaining_cbs = []
+    def mark_completed(self):
+        to_move = []
+        for i, var in enumerate(self.vars):
+            if var.get() == 1:
+                to_move.append(i)
+        for i in reversed(to_move):
+            task = self.tasks.pop(i)
+            var = self.vars.pop(i)
+            cb = self.checkbuttons.pop(i)
+            cb.destroy()
+            self.completed_tasks.append(task)
+            self.completed_vars.append(var)
+            cb_completed = tk.Checkbutton(self.completed_frame, text=task, variable=var, fg='black', bg='#84BEC4', selectcolor='white', state='disabled')
+            cb_completed.pack(anchor='w')
+            self.completed_checkbuttons.append(cb_completed)
 
-        for task, var, cb in zip(self.tasks, self.vars, self.checkbuttons):
+    def clear_table(self):
+        remaining_completed = []
+        remaining_completed_vars = []
+        remaining_completed_cbs = []
+        for task, var, cb in zip(self.completed_tasks, self.completed_vars, self.completed_checkbuttons):
             if var.get() == 1:
                 cb.destroy()
             else:
-                remaining_tasks.append(task)
-                remaining_vars.append(var)
-                remaining_cbs.append(cb)
-
-        self.tasks = remaining_tasks
-        self.vars = remaining_vars
-        self.checkbuttons = remaining_cbs
-
-        with open('userInterface/tasks.txt', 'w') as f:
-            for task in self.tasks:
+                remaining_completed.append(task)
+                remaining_completed_vars.append(var)
+                remaining_completed_cbs.append(cb)
+        self.completed_tasks = remaining_completed
+        self.completed_vars = remaining_completed_vars
+        self.completed_checkbuttons = remaining_completed_cbs
+        with open('userInterface/tasks.txt','w') as f:
+            for task in self.tasks + self.completed_tasks:
                 f.write(task + '\n')
 
     def display_task(self):
@@ -103,12 +124,15 @@ scrollbar.pack(side="right", fill="y")
 
 scroll_frame.pack(expand=True, fill="both", padx=10)
 
-incomplete_Tasks = tk.Label(task_frame, text="Incomplete Tasks", fg='black')
 
 ob = Task(task_frame)
 
-del_tsk_btn = tk.Button(root, text="Delete Task", width=25, command=ob.del_task)
+add_tsk_btn = tk.Button(root, text='Add Task', width=25, command=lambda: ob.add_task(entry.get()))
+add_tsk_btn.pack(anchor='nw')
+
+del_tsk_btn = tk.Button(root, text="Clear Completed Tasks", width=25, command=ob.clear_table)
 del_tsk_btn.pack(anchor='nw',pady=10)
 
 
+# completed_Tasks = tk.Label(task_frame, text="Completed Tasks", fg='black').pack()
 root.mainloop()
