@@ -1,4 +1,5 @@
-bhut acche
-Isogashi desu
-Otsukare sama desu
-acca
+maths
+phy
+chem
+dms
+dbms

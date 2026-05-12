@@ -2,6 +2,7 @@ import tkinter as tk
 import os 
 from PIL import ImageTk, Image
 
+
 class Task():
 
     def __init__(self, frame):
@@ -112,22 +113,25 @@ root = tk.Tk()
 
 root.title("TO-DO_LIST")
 # root.minsize(400,200)
-root.geometry('350x500')
+root.geometry('500x800')
 root.resizable(1,1)
-root.configure(background = '#9BCACD')
+root.configure(background = "#FFFFFF")
 
-heading = tk.Label(root, text='My TO-DO-List', fg='white', bg='#006564')
-heading.pack(pady=(20,10))
-heading.config(font=('verdana', 20))
+heading = tk.Label(root, text='TO-DO App', fg='white', bg="#0D0245",anchor='w')
+heading.pack(pady=(2),anchor="w",fill="x")
+heading.config(font=('verdana', 28,'bold'))
 
-tk.Label(root, text='Type a new Task here!! ', fg='white', bg='#006564').pack(pady=(20,0))
-entry = tk.Entry(root, width=40)
-entry.pack(ipady=5,pady=(0,10))
+tk.Label(root, text='Active task',font=('arieal',20,'bold'),fg='white', background="#000000",foreground="yellow").pack(pady=(15,15),fill='x',padx=150)
+entry = tk.Entry(root,text="Entry your Task",width=150,background="white")
+entry.pack(ipady=9,pady=(0,10),anchor='center')
 
-scroll_frame = tk.Frame(root, bg="#84BEC4")
-canvas = tk.Canvas(scroll_frame, bg="#84BEC4", highlightthickness=0)
+add_tsk_btn = tk.Button(root, text='Add', width=25, command=lambda: ob.add_task(entry.get()))
+add_tsk_btn.pack(anchor='se')
+
+scroll_frame = tk.Frame(root, bg="#ECEFDA")
+canvas = tk.Canvas(scroll_frame, bg="#ECEFDA", highlightthickness=0)
 scrollbar = tk.Scrollbar(scroll_frame, orient="vertical", command=canvas.yview)
-task_frame = tk.Frame(canvas, bg="#84BEC4")
+task_frame = tk.Frame(canvas, bg="#ECEFDA")
 
 task_frame.bind(
     "<Configure>",
