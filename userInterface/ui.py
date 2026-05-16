@@ -14,6 +14,8 @@ class Task():
         self.completed_tasks = []
         self.completed_vars = []
         self.completed_checkbuttons = []
+        self.counter_var = tk.StringVar()
+        self.counter_var.set("0 / 0 tasks completed")
         self.pending_frame = tk.Frame(frame, bg="#162030")
         self.pending_frame.pack(anchor='w')
         tk.Label(self.pending_frame, text="Pending Tasks",font=("Trebuchet MS", 10, "bold"), fg="#C5972A", bg="#1A3248").pack(anchor='center', fill='x')
@@ -42,6 +44,7 @@ class Task():
             cb.pack(anchor='w')
             self.checkbuttons.append(cb)
             entry.delete(0, tk.END)
+        self.update_counter()
 
     def mark_completed(self):
         to_move = []
@@ -69,6 +72,7 @@ class Task():
             )
             cb_completed.pack(anchor='w',fill='x')
             self.completed_checkbuttons.append(cb_completed)
+        self.update_counter()
 
     def unmark_completed(self):
         to_move = []
@@ -94,6 +98,7 @@ class Task():
             )
             cb_pending.pack(anchor='w')
             self.checkbuttons.append(cb_pending)
+        self.update_counter()
 
     def clear_table(self):
         remaining_completed = []
@@ -112,6 +117,12 @@ class Task():
         with open('userInterface/tasks.txt','w') as f:
             for task in self.tasks + self.completed_tasks:
                 f.write(task + '\n')
+        self.update_counter()
+
+    def update_counter(self):
+        total = len(self.tasks) + len(self.completed_tasks)
+        done = len(self.completed_tasks)
+        self.counter_var.set(f"{done} / {total} tasks completed")
 
     def display_task(self):
         print(self.task_str)
@@ -129,18 +140,19 @@ heading.config(font=('verdana', 28,'bold'))
 tk.Label(
     root,
     text="Stay focused. Stay ahead.",
-    font=('italic', 12), fg="#C5972A", bg="#0F1923",
+    font=('italic', 12), fg="#FFC745", bg="#0F1923",
     padx=22
 ).pack(anchor="w")
-tk.Frame(root, height=2, bg="#C5972A").pack(fill='x')
+tk.Frame(root, height=2, bg="#C38A04").pack(fill='x')
 
 input_card = tk.Frame(root,bd=3, bg="#162030", pady=8, padx=2)
 input_card.pack(fill="x", padx=100, pady=(20, 0))
 
 tk.Label(input_card, text='NEW TASK',font=("Trebuchet MS", 10, "bold"),fg='#D6E4F0', background="#162030",anchor='w').pack(fill='x',padx=6)
-entry = tk.Entry(input_card,bd=3,font=("Trebuchet MS", 13),width=150,background="#1C2B3A",fg="#8BA3B8",insertbackground="#C5972A")
-entry.pack(ipady=9,pady=(0,10),anchor='w',padx=6,fill='x')
-entry.pack(fill="x")
+entry_wrap = tk.Frame(input_card, bg="#162030", highlightthickness=2, highlightbackground="#162030")
+entry_wrap.pack(fill='x', padx=6, pady=(0,10), anchor='w')
+entry = tk.Entry(entry_wrap,bd=0,font=("Trebuchet MS", 13),width=150,background="#1C2B3A",fg="#8BA3B8",insertbackground="#C5972A")
+entry.pack(ipady=9,fill='x')
 entry.insert(0, "Enter your task here...")
 
 def _focus_in(e):
@@ -183,16 +195,34 @@ def _on_mousewheel(event):
         canvas.yview_scroll(int(-1 * event.delta), "units")
 
 canvas.bind_all("<MouseWheel>", _on_mousewheel)
-canvas.bind_all("<Button-4>", lambda e: canvas.yview_scroll(-1, "units"))
-canvas.bind_all("<Button-5>", lambda e: canvas.yview_scroll(1, "units"))
+# canvas.bind_all("<Button-4>", lambda e: canvas.yview_scroll(-1, "units"))
+# canvas.bind_all("<Button-5>", lambda e: canvas.yview_scroll(1, "units"))
 
 canvas.pack(side="left", expand=True, fill="both")
 scrollbar.pack(side="right", fill="y")
 
 scroll_frame.pack(expand=True, fill="both", padx=100)
 
-
 ob = Task(task_frame)
+
+counter_label = tk.Label(
+    root,
+    textvariable=ob.counter_var,
+    font=("Trebuchet MS", 9, "bold"),
+    fg="#C5972A",
+    bg="#162030",
+    bd=1,
+    relief="groove",
+    highlightthickness=1,
+    highlightbackground="#C5972A",
+    highlightcolor="#C5972A",
+    anchor='w',
+    # padx=4,
+    # pady=4
+)
+counter_label.pack(fill='x', padx=100, pady=(10, 0))
+
+
 
 tk.Frame(root, height=2, bg="#1E3A52").pack(fill='x',padx=100,pady=(10,0))
 
