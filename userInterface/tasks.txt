@@ -1,5 +1,3 @@
-Buy Groceries
-Car Washing
-Maths Asssignment
-Update Client's Data
-Meeting with John
+🟡 Medium||Dinner with School Friend
+🟡 Medium||Groceries Shopping
+🔴 High||Email to Client
