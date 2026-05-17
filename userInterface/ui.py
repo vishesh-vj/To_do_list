@@ -30,7 +30,7 @@ class Task():
                 var = tk.IntVar()
                 self.vars.append(var)
                 cb = tk.Checkbutton(self.pending_frame, text=task, variable=var, fg='white',bg='#162030',activebackground="#162030",activeforeground="#C5972A", selectcolor="#C5972A", command=self.mark_completed)
-                cb.pack(anchor='w')
+                cb.pack(anchor='w', pady=4)
                 self.checkbuttons.append(cb)
 
     def add_task(self, task_str):
@@ -41,7 +41,7 @@ class Task():
             var = tk.IntVar()
             self.vars.append(var)
             cb = tk.Checkbutton(self.pending_frame, text=task_str, variable=var, fg='#D6E4F0', bg='#162030', selectcolor="#C5972A", command=self.mark_completed)
-            cb.pack(anchor='w')
+            cb.pack(anchor='w',pady=4)
             self.checkbuttons.append(cb)
             entry.delete(0, tk.END)
         self.update_counter()
@@ -96,7 +96,7 @@ class Task():
                 selectcolor='#C5972A',
                 command=self.mark_completed
             )
-            cb_pending.pack(anchor='w')
+            cb_pending.pack(anchor='w',pady=4)
             self.checkbuttons.append(cb_pending)
         self.update_counter()
 
@@ -208,7 +208,7 @@ ob = Task(task_frame)
 counter_label = tk.Label(
     root,
     textvariable=ob.counter_var,
-    font=("Trebuchet MS", 9, "bold"),
+    font=("Trebuchet MS", 11, "bold"),
     fg="#C5972A",
     bg="#162030",
     bd=1,
@@ -217,8 +217,8 @@ counter_label = tk.Label(
     highlightbackground="#C5972A",
     highlightcolor="#C5972A",
     anchor='w',
-    # padx=4,
-    # pady=4
+    padx=4,
+    pady=4
 )
 counter_label.pack(fill='x', padx=100, pady=(10, 0))
 
