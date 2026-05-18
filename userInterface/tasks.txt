@@ -1,3 +1,4 @@
-🔴 High||Email to Client
-🟡 Medium||Groceries Shopping
-🟡 Medium||Dinner with School Friend
+Medium||Groceries Shopping
+Medium||Dinner with School Friend
+Medium||sleep
+Low||eat

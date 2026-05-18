@@ -1,30 +1,34 @@
 # theme.py
 
 COLORS = {
-    "bg": "#121212",               # Dark background
-    "card_bg": "#1E1E1E",          # Slightly lighter for cards
-    "accent_pink": "#FF007F",      # Hot Pink (Funky/Gen-Z)
-    "accent_green": "#39FF14",     # Lime Green
-    "accent_cyan": "#00FFFF",      # Bright Cyan
-    "accent_purple": "#8A2BE2",    # Electric Purple
-    "text_main": "#FFFFFF",        # White text
-    "text_muted": "#A0A0A0",       # Muted gray text
-    "separator": "#333333",        # Dark gray for dividers
+    "bg": "#1B1F24",               # Deep Royal Dark
+    "card_bg": "#232830",          # Slightly lighter for cards
+    "accent_primary": "#D4AF37",   # Royal Gold
+    "accent_high": "#E63946",      # Elegant Red
+    "accent_med": "#D4AF37",       # Royal Gold
+    "accent_low": "#6096BA",       # Subtle Blue
+    "text_main": "#F8F9FA",        # Off-white text
+    "text_muted": "#8B949E",       # Muted gray text
+    "separator": "#30363D",        # Dark gray for dividers
 }
 
+# Define font families here so it's perfectly modular!
+HEADING_FONT = "Palatino Linotype"  # A highly stylish, elegant classic serif
+BODY_FONT = "Segoe UI"              # A clean, modern sans-serif for readability
+
 FONTS = {
-    "h1": ("Comic Sans MS", 28, "bold"),       # Ironic Y2K Gen-Z style
-    "h2": ("Comic Sans MS", 14, "bold"),
-    "body": ("Verdana", 11),                   # Clean but slightly brutalist
-    "body_bold": ("Verdana", 11, "bold"),
-    "body_strike": ("Verdana", 11, "overstrike"),
-    "small": ("Verdana", 9)
+    "h1": (HEADING_FONT, 28, "bold"),
+    "h2": (HEADING_FONT, 14, "bold"),
+    "body": (BODY_FONT, 11),
+    "body_bold": (BODY_FONT, 11, "bold"),
+    "body_strike": (BODY_FONT, 11, "overstrike"),
+    "small": (BODY_FONT, 9)
 }
 
 PRIORITY_CONFIG = {
-    "🔴 High":   {"fg": COLORS["accent_pink"], "order": 0},
-    "🟡 Medium": {"fg": COLORS["accent_purple"], "order": 1},
-    "🔵 Low":    {"fg": COLORS["accent_cyan"], "order": 2},
+    "High":   {"fg": COLORS["accent_high"], "order": 0},
+    "Medium": {"fg": COLORS["accent_med"], "order": 1},
+    "Low":    {"fg": COLORS["accent_low"], "order": 2},
 }
 
 PRIORITY_LABELS = list(PRIORITY_CONFIG.keys())

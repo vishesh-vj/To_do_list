@@ -19,15 +19,15 @@ class Task:
         self.completed_vars = []
         self.completed_checkbuttons = []
 
-        self.counter_var = tk.StringVar(value="🚀 0 / 0 TASKS COMPLETED")
+        self.counter_var = tk.StringVar(value="0 / 0 Tasks Completed")
 
         # Pending section card
         self.pending_frame = tk.Frame(frame, bg=COLORS["card_bg"], pady=10, padx=10)
         self.pending_frame.pack(anchor='w', fill='x', pady=5)
         tk.Label(
-            self.pending_frame, text="✨ PENDING TASKS",
+            self.pending_frame, text="Pending Tasks",
             font=FONTS["h2"],
-            fg=COLORS["accent_green"], bg=COLORS["card_bg"]
+            fg=COLORS["accent_primary"], bg=COLORS["card_bg"]
         ).pack(anchor='center', fill='x', pady=(0, 10))
 
         # Completed section card
@@ -35,7 +35,7 @@ class Task:
         self.completed_frame.pack(anchor='w', fill='x', pady=5)
         tk.Label(
             self.completed_frame,
-            text="✅ COMPLETED TASKS",
+            text="Completed Tasks",
             font=FONTS["h2"],
             fg=COLORS["text_muted"], bg=COLORS["card_bg"]
         ).pack(anchor='center', fill='x', pady=(0, 10))
@@ -49,9 +49,12 @@ class Task:
                         continue
                     if '||' in line:
                         pri, title = line.split('||', 1)
-                        pri = pri if pri in PRIORITY_CONFIG else "🟡 Medium"
+                        if pri == "🔴 High": pri = "High"
+                        elif pri == "🟡 Medium": pri = "Medium"
+                        elif pri == "🔵 Low": pri = "Low"
+                        pri = pri if pri in PRIORITY_CONFIG else "Medium"
                     else:
-                        pri, title = "🟡 Medium", line
+                        pri, title = "Medium", line
                     raw_tasks.append(title)
                     raw_pris.append(pri)
 
@@ -72,7 +75,7 @@ class Task:
                 self.vars.append(var)
                 cb = tk.Checkbutton(
                     self.pending_frame,
-                    text=f"{pri}  {title}",
+                    text=f"{title}",
                     variable=var,
                     fg=color, bg=COLORS["card_bg"],
                     activebackground=COLORS["card_bg"], activeforeground=color,
@@ -85,12 +88,12 @@ class Task:
 
         self.update_counter()
         
-    def add_task(self, task_str, priority="🟡 Medium", hour="--", minute="--"):
+    def add_task(self, task_str, priority="Medium", hour="--", minute="--"):
         task_str = task_str.strip()
-        if not task_str or task_str == "Enter your task here...":
+        if not task_str or task_str == "Enter task details...":
             return False
         if priority not in PRIORITY_CONFIG:
-            priority = "🟡 Medium"
+            priority = "Medium"
 
         # Ensure directory exists or file can be created
         os.makedirs('userInterface', exist_ok=True)
@@ -113,7 +116,7 @@ class Task:
 
         cb = tk.Checkbutton(
             self.pending_frame,
-            text=f"{priority}  {task_str}",
+            text=f"{task_str}",
             variable=var,
             fg=color, bg=COLORS["card_bg"],
             activebackground=COLORS["card_bg"], activeforeground=color,
@@ -134,7 +137,7 @@ class Task:
 
             def on_due(title, cb_ref=cb):
                 try:
-                    cb_ref.config(fg=COLORS["accent_pink"])
+                    cb_ref.config(fg=COLORS["accent_high"])
                 except tk.TclError:
                     pass
 
@@ -160,7 +163,7 @@ class Task:
 
             cb_done = tk.Checkbutton(
                 self.completed_frame,
-                text=f"{priority}  {task}",
+                text=f"{task}",
                 font=FONTS["body_strike"],
                 anchor='w', variable=var,
                 fg=COLORS["text_muted"], bg=COLORS["card_bg"],
@@ -195,7 +198,7 @@ class Task:
             color = PRIORITY_CONFIG[priority]["fg"]
             cb_pending = tk.Checkbutton(
                 self.pending_frame,
-                text=f"{priority}  {task}",
+                text=f"{task}",
                 variable=var,
                 fg=color, bg=COLORS["card_bg"],
                 activebackground=COLORS["card_bg"], activeforeground=color,
@@ -244,6 +247,6 @@ class Task:
     def update_counter(self):
         total = len(self.tasks) + len(self.completed_tasks)
         done  = len(self.completed_tasks)
-        self.counter_var.set(f"🚀 {done} / {total} TASKS COMPLETED")
+        self.counter_var.set(f"{done} / {total} Tasks Completed")
         if self.update_counter_callback:
             self.update_counter_callback()

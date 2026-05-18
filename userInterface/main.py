@@ -14,7 +14,7 @@ def update_time(date_label, time_label):
 
 def main():
     root = tk.Tk()
-    root.title("⚡ FUNKY TO-DO ⚡")
+    root.title("Task Manager")
     root.geometry('550x850')
     root.resizable(True, True)
     root.configure(background=COLORS["bg"])
@@ -28,8 +28,8 @@ def main():
     header_frame.pack(fill='x', padx=20, pady=(15, 5))
 
     tk.Label(
-        header_frame, text='⚡ GET IT DONE',
-        fg=COLORS["accent_cyan"], bg=COLORS["bg"],
+        header_frame, text='Task Manager',
+        fg=COLORS["accent_primary"], bg=COLORS["bg"],
         font=FONTS["h1"], anchor='w'
     ).pack(side='left')
 
@@ -37,43 +37,43 @@ def main():
     clock_frame.pack(side='right', anchor='e', pady=(10, 0))
 
     date_label = tk.Label(clock_frame, font=FONTS["body_bold"],
-                          fg=COLORS["accent_pink"], bg=COLORS["bg"], anchor='e')
+                          fg=COLORS["text_muted"], bg=COLORS["bg"], anchor='e')
     date_label.pack(anchor='e')
 
     time_label = tk.Label(clock_frame, font=FONTS["h2"],
-                          fg=COLORS["accent_green"], bg=COLORS["bg"], anchor='e')
+                          fg=COLORS["accent_primary"], bg=COLORS["bg"], anchor='e')
     time_label.pack(anchor='e')
 
     update_time(date_label, time_label)
 
-    tk.Label(root, text="NO EXCUSES, JUST RESULTS. 🔥",
-             font=FONTS["body"], fg=COLORS["accent_purple"], bg=COLORS["bg"], padx=25).pack(anchor="w")
+    tk.Label(root, text="Organize your day with elegance.",
+             font=FONTS["body"], fg=COLORS["accent_primary"], bg=COLORS["bg"], padx=25).pack(anchor="w")
     tk.Frame(root, height=3, bg=COLORS["separator"]).pack(fill='x', pady=5)
 
     # Input Section
-    input_card = tk.Frame(root, bd=0, bg=COLORS["card_bg"], pady=12, padx=12, highlightthickness=2, highlightbackground=COLORS["accent_pink"])
+    input_card = tk.Frame(root, bd=0, bg=COLORS["card_bg"], pady=12, padx=12, highlightthickness=2, highlightbackground=COLORS["accent_primary"])
     input_card.pack(fill="x", padx=40, pady=(15, 10))
 
-    tk.Label(input_card, text='✨ NEW TASK', font=FONTS["h2"],
+    tk.Label(input_card, text='New Task', font=FONTS["h2"],
              fg=COLORS["text_main"], bg=COLORS["card_bg"], anchor='w').pack(fill='x', padx=6, pady=(0, 5))
 
     entry_wrap = tk.Frame(input_card, bg=COLORS["bg"], highlightthickness=2, highlightbackground=COLORS["separator"])
     entry_wrap.pack(fill='x', padx=6, pady=(0, 10), anchor='w')
 
     entry = tk.Entry(entry_wrap, bd=0, font=FONTS["body"], width=150,
-                     background=COLORS["bg"], fg=COLORS["text_muted"], insertbackground=COLORS["accent_cyan"])
+                     background=COLORS["bg"], fg=COLORS["text_muted"], insertbackground=COLORS["accent_primary"])
     entry.pack(ipady=10, fill='x', padx=5)
-    entry.insert(0, "What's the move? Type here...")
+    entry.insert(0, "Enter task details...")
 
     def _focus_in(e):
-        if entry.get() == "What's the move? Type here...":
+        if entry.get() == "Enter task details...":
             entry.delete(0, tk.END)
-            entry.config(fg=COLORS["accent_green"])
-        entry_wrap.config(highlightbackground=COLORS["accent_green"])
+            entry.config(fg=COLORS["accent_primary"])
+        entry_wrap.config(highlightbackground=COLORS["accent_primary"])
 
     def _focus_out(e):
         if not entry.get().strip():
-            entry.insert(0, "What's the move? Type here...")
+            entry.insert(0, "Enter task details...")
             entry.config(fg=COLORS["text_muted"])
         entry_wrap.config(highlightbackground=COLORS["separator"])
 
@@ -84,7 +84,7 @@ def main():
     options_row.pack(fill='x', padx=6, pady=(0, 10))
 
     # Priority dropdown
-    priority_var = tk.StringVar(value="🟡 Medium")
+    priority_var = tk.StringVar(value="Medium")
     
     style = ttk.Style()
     style.theme_use('default')
@@ -119,16 +119,16 @@ def main():
         success = ob.add_task(entry.get(), priority_var.get(), hour_var.get(), minute_var.get())
         if success:
             entry.delete(0, tk.END)
-            priority_var.set("🟡 Medium")
+            priority_var.set("Medium")
             hour_var.set("--")
             minute_var.set("--")
 
     entry.bind("<Return>", lambda e: on_add_task())
 
     add_tsk_btn = tk.Button(
-        input_card, text='🔥 ADD TASK',
+        input_card, text='Add Task',
         font=FONTS["h2"],
-        fg=COLORS["bg"], bg=COLORS["accent_pink"], activebackground=COLORS["accent_green"], activeforeground=COLORS["bg"],
+        fg=COLORS["bg"], bg=COLORS["accent_primary"], activebackground=COLORS["accent_high"], activeforeground=COLORS["bg"],
         width=12, height=1, bd=0, cursor="hand2",
         command=on_add_task
     )
@@ -175,7 +175,7 @@ def main():
         root,
         textvariable=ob.counter_var,
         font=FONTS["h2"],
-        fg=COLORS["accent_cyan"], bg=COLORS["bg"],
+        fg=COLORS["accent_primary"], bg=COLORS["bg"],
         anchor='w', padx=4, pady=10
     )
     counter_label.pack(fill='x', padx=40, side='top')
@@ -183,11 +183,11 @@ def main():
     tk.Frame(root, height=3, bg=COLORS["separator"]).pack(fill='x', padx=40)
 
     del_tsk_btn = tk.Button(
-        root, text="🗑️ Clear Completed", width=20,
+        root, text="Clear Completed", width=20,
         font=FONTS["body_bold"],
         command=ob.clear_table,
-        fg=COLORS["bg"], bg=COLORS["accent_purple"],
-        activebackground=COLORS["accent_cyan"], activeforeground=COLORS["bg"],
+        fg=COLORS["bg"], bg=COLORS["separator"],
+        activebackground=COLORS["accent_high"], activeforeground=COLORS["bg"],
         bd=0, cursor="hand2"
     )
     del_tsk_btn.pack(anchor='w', pady=15, padx=40)
