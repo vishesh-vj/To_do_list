@@ -1,3 +1,0 @@
-with open('userInterface/tasks.txt', 'r') as f:
-    for l in f:
-        print(l)
