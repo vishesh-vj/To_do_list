@@ -15,6 +15,7 @@ class Task:
         self.checkbuttons = []
 
         self.completed_tasks = []
+        self.completed_priorities = []
         self.completed_vars = []
         self.completed_checkbuttons = []
 
@@ -154,6 +155,7 @@ class Task:
             self.reminder_manager.remove_reminder(task)
 
             self.completed_tasks.append(task)
+            self.completed_priorities.append(priority)
             self.completed_vars.append(var)
 
             cb_done = tk.Checkbutton(
@@ -174,20 +176,21 @@ class Task:
         to_move = [i for i, v in enumerate(self.completed_vars) if v.get() == 0]
         for i in reversed(to_move):
             task = self.completed_tasks.pop(i)
+            priority = self.completed_priorities.pop(i)
             var  = self.completed_vars.pop(i)
             cb   = self.completed_checkbuttons.pop(i)
             cb.destroy()
 
-            priority = "🟡 Medium"
-            for p in PRIORITY_CONFIG:
-                if task.startswith(p + "  "):
-                    priority = p
-                    task = task[len(p) + 2:]
+            order     = PRIORITY_CONFIG[priority]["order"]
+            insert_at = len(self.tasks)
+            for j, p in enumerate(self.priorities):
+                if PRIORITY_CONFIG[p]["order"] > order:
+                    insert_at = j
                     break
 
-            self.tasks.append(task)
-            self.priorities.append(priority)
-            self.vars.append(var)
+            self.tasks.insert(insert_at, task)
+            self.priorities.insert(insert_at, priority)
+            self.vars.insert(insert_at, var)
 
             color = PRIORITY_CONFIG[priority]["fg"]
             cb_pending = tk.Checkbutton(
@@ -201,23 +204,25 @@ class Task:
                 anchor='w', font=FONTS["body_bold"]
             )
             cb_pending.pack(anchor='w', fill='x', padx=6, pady=4)
-            self.checkbuttons.append(cb_pending)
+            self.checkbuttons.insert(insert_at, cb_pending)
             self._repack_pending()
         self.update_counter()
 
     def clear_table(self):
-        keep_tasks, keep_vars, keep_cbs = [], [], []
-        for task, var, cb in zip(
-                self.completed_tasks, self.completed_vars,
-                self.completed_checkbuttons):
+        keep_tasks, keep_pris, keep_vars, keep_cbs = [], [], [], []
+        for task, pri, var, cb in zip(
+                self.completed_tasks, self.completed_priorities,
+                self.completed_vars, self.completed_checkbuttons):
             if var.get() == 1:
                 cb.destroy()
             else:
                 keep_tasks.append(task)
+                keep_pris.append(pri)
                 keep_vars.append(var)
                 keep_cbs.append(cb)
 
         self.completed_tasks        = keep_tasks
+        self.completed_priorities   = keep_pris
         self.completed_vars         = keep_vars
         self.completed_checkbuttons = keep_cbs
 
@@ -225,12 +230,7 @@ class Task:
         with open('userInterface/tasks.txt', 'w', encoding='utf-8') as f:
             for task, pri in zip(self.tasks, self.priorities):
                 f.write(f"{pri}||{task}\n")
-            for task in self.completed_tasks:
-                pri = "🟡 Medium"
-                for p in PRIORITY_CONFIG:
-                    if task.startswith(p + "  "):
-                        pri = p
-                        break
+            for task, pri in zip(self.completed_tasks, self.completed_priorities):
                 f.write(f"{pri}||{task}\n")
 
         self.update_counter()
